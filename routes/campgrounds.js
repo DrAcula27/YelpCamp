@@ -8,6 +8,7 @@ const ExpressError = require("../utilities/ExpressError");
 
 const Campground = require("../models/campground");
 
+// middleware //
 const validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
@@ -18,6 +19,9 @@ const validateCampground = (req, res, next) => {
   }
 };
 
+// ROUTES //
+
+// show all campgrounds
 router.get(
   "/",
   catchAsync(async (req, res) => {
@@ -26,20 +30,24 @@ router.get(
   })
 );
 
+// get create new campground form
 router.get("/new", (req, res) => {
   res.render("campgrounds/new");
 });
 
+// create new campground
 router.post(
   "/",
   validateCampground,
   catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
+    req.flash("success", "Successfully created a new campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
 
+// show single campground
 router.get(
   "/:id",
   catchAsync(async (req, res) => {
@@ -50,6 +58,7 @@ router.get(
   })
 );
 
+// get edit single campground form
 router.get(
   "/:id/edit",
   catchAsync(async (req, res) => {
@@ -58,6 +67,7 @@ router.get(
   })
 );
 
+// edit single campground
 router.put(
   "/:id",
   validateCampground,
@@ -70,6 +80,7 @@ router.put(
   })
 );
 
+// delete single campground
 router.delete(
   "/:id",
   catchAsync(async (req, res) => {
