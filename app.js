@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+
+const User = require("./models/user");
 
 const ExpressError = require("./utilities/ExpressError");
 
@@ -49,11 +53,25 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.sucess = req.flash("success");
   res.locals.error = req.flash("error");
   next();
+});
+
+app.get("/fakeUser", async (req, res) => {
+  const user = new User({ email: "test@email.com", username: "username" });
+  const newUser = await User.register(user, "password");
+  res.send(newUser);
 });
 
 app.use("/campgrounds", campgrounds);
