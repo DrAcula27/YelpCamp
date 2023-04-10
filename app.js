@@ -12,8 +12,9 @@ const User = require("./models/user");
 
 const ExpressError = require("./utilities/ExpressError");
 
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
 
 const COLLECTION = "YelpCamp";
 let connectionString = `mongodb+srv://perscholasuser:tRlCgTfk71FOzp6p@mongosetupcluster.muoiuud.mongodb.net/${COLLECTION}?retryWrites=true&w=majority`;
@@ -68,14 +69,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/fakeUser", async (req, res) => {
-  const user = new User({ email: "test@email.com", username: "username" });
-  const newUser = await User.register(user, "password");
-  res.send(newUser);
-});
-
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.use("/", userRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.get(`/`, (req, res) => {
   res.render(`home`);
