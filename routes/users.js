@@ -40,4 +40,14 @@ router.post(
   }
 );
 
+router.get("/logout", (req, res, next) => {
+  req.logout((error) => {
+    if (error) {
+      return next(error);
+    }
+    req.flash("success", "Logout successful.");
+    res.redirect("/campgrounds");
+  });
+});
+
 module.exports = router;
