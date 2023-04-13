@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -17,7 +21,7 @@ const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 
 const COLLECTION = "YelpCamp";
-let connectionString = `mongodb+srv://perscholasuser:tRlCgTfk71FOzp6p@mongosetupcluster.muoiuud.mongodb.net/${COLLECTION}?retryWrites=true&w=majority`;
+let connectionString = `mongodb+srv://${process.env.MONGODB}/${COLLECTION}?retryWrites=true&w=majority`;
 
 mongoose.set("strictQuery", false);
 
