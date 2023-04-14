@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const cities = require("./cities");
 const { places, descriptors } = require("./seedHelpers");
 const Campground = require("../models/campground");
+require("dotenv").config();
 
 const COLLECTION = "YelpCamp";
-let connectionString = `mongodb+srv://perscholasuser:tRlCgTfk71FOzp6p@mongosetupcluster.muoiuud.mongodb.net/${COLLECTION}?retryWrites=true&w=majority`;
+let connectionString = `mongodb+srv://${process.env.MONGODB}/${COLLECTION}?retryWrites=true&w=majority`;
 
 mongoose.set("strictQuery", false);
 
@@ -30,10 +31,19 @@ const seedDB = async () => {
       author: "643487992ebc6dbfbb16c217",
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
-      image: "https://source.unsplash.com/collection/483251",
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti illo dicta qui ea perspiciatis sapiente sequi odio necessitatibus, aspernatur sint deserunt consequatur voluptatum ut impedit expedita ratione rem laboriosam quas.",
       price,
+      images: [
+        {
+          url: "https://res.cloudinary.com/dnt5ntba2/image/upload/v1681487637/YelpCamp/aocusfsy7qmarkesejgu.jpg",
+          filename: "YelpCamp/aocusfsy7qmarkesejgu",
+        },
+        {
+          url: "https://res.cloudinary.com/dnt5ntba2/image/upload/v1681487637/YelpCamp/li7awfgoisek99v4eftr.jpg",
+          filename: "YelpCamp/li7awfgoisek99v4eftr",
+        },
+      ],
     });
     await camp.save();
   }
