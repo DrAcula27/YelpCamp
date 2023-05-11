@@ -3,7 +3,7 @@ const map = new mapboxgl.Map({
   container: "map", // container ID
   center: campground.geometry.coordinates, // starting position [lng, lat]
   zoom: 13, // starting zoom
-  style: "mapbox://styles/mapbox/streets-v12", // style URL
+  style: "mapbox://styles/mapbox/light-v11", // style URL
   hash: true, // sync `center`, `zoom`, `pitch`, and `bearing` with URL
   // Use `transformRequest` to modify requests that begin with `http://myHost`.
   transformRequest: (url, resourceType) => {
