@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
@@ -48,6 +49,18 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
+const mongoSessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGODB_URL,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: "SuperSecret",
+  },
+});
+
+mongoSessionStore.on("error", function (e) {
+  console.log("SESSION STORE ERROR", e);
+});
+
 const sessionConfig = {
   name: "yelpCampSession_id",
   secret: "ThisShouldBeABetterSecretInTheFuture",
@@ -59,6 +72,7 @@ const sessionConfig = {
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
+  store: mongoSessionStore,
 };
 app.use(session(sessionConfig));
 
