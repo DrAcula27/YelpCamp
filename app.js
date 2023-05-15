@@ -23,12 +23,9 @@ const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 
-const COLLECTION = "YelpCamp";
-let connectionString = `mongodb+srv://${process.env.MONGODB}/${COLLECTION}?retryWrites=true&w=majority`;
-
 mongoose.set("strictQuery", false);
 
-mongoose.connect(connectionString, {
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -36,7 +33,7 @@ mongoose.connect(connectionString, {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "db connection error: "));
 db.once("open", () => {
-  console.log(`connected to MongoDB collection: ${COLLECTION}`);
+  console.log(`connected to MongoDB Atlas`);
 });
 
 const app = express();
