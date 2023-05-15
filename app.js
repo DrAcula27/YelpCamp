@@ -53,7 +53,7 @@ const mongoSessionStore = MongoStore.create({
   mongoUrl: process.env.MONGODB_URL,
   touchAfter: 24 * 60 * 60,
   crypto: {
-    secret: "SuperSecret",
+    secret: process.env.SECRET,
   },
 });
 
@@ -63,7 +63,7 @@ mongoSessionStore.on("error", function (e) {
 
 const sessionConfig = {
   name: "yelpCampSession_id",
-  secret: "ThisShouldBeABetterSecretInTheFuture",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
